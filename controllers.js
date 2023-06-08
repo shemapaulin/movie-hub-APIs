@@ -12,9 +12,14 @@ const showMovie = (req, res) => {
     res.send(response);
 }
 const addMovie = (req, res) => {
+  let Mname=req.body.name
+  let getMovie= movie.find((x)=>x.name===Mname);
+  if (getMovie) {
+   return res.send("movie name already exist").status(404);
+   }
     let newMovie = {
         id: movie.length + 1,
-        name: req.body.name,
+        name: Mname,
         type: req.body.type
     }
     let pusher = movie.push(newMovie)
@@ -30,6 +35,9 @@ const updateMovie=(req,res)=>{
   
     let getMovie= movie.find((x)=>x.id==parseInt(singleMovie));
     
+  if (!getMovie) {
+    res.send("invalid input").status(400);
+   }
   getMovie.name=req.body.name
   getMovie.type=req.body.type
   res.send( "movie aupdated successfuly")
