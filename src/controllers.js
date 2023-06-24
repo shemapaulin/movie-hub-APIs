@@ -1,6 +1,6 @@
 import movie from "./index.js";
-
-
+import movieValidationSchema from "./utils/validation.js";
+import reportJoiError from "./utils/reportError.js";
 
 
 const showMovies = (req, res) => {
@@ -12,10 +12,12 @@ const showMovie = (req, res) => {
     res.send(response);
 }
 const addMovie = (req, res) => {
+ const validate=movieValidationSchema.validate(req.body);
+ if(validate.error) return reportJoiError(validate,res)
   let Mname=req.body.name
   let getMovie= movie.find((x)=>x.name===Mname);
   if (getMovie) {
-   return res.send("movie name already exist").status(404);
+   return res.send("data name already exist").status(404);
    }
     let newMovie = {
         id: movie.length + 1,
